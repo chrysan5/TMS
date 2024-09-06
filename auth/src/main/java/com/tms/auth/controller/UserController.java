@@ -1,6 +1,6 @@
 package com.tms.auth.controller;
 
-import com.tms.auth.dto.UserRequestDto;
+import com.tms.auth.dto.SignupRequestDto;
 import com.tms.auth.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -16,9 +16,8 @@ public class UserController {
 
     private final UserService authService;
 
-    // 회원 가입 요청 처리
     @PostMapping("/signup")
-    public void signup(@Valid @RequestBody UserRequestDto userRequestDto) {
+    public void signup(@Valid @RequestBody SignupRequestDto userRequestDto) {
         authService.signup(userRequestDto);
     }
 }
