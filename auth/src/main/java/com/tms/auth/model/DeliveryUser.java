@@ -3,18 +3,16 @@ package com.tms.auth.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "p_users")
-public class User {
+@Table(name = "p_delivery_users")
+public class DeliveryUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "delivery_user_id")
+    private Long deliveryUserId;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -23,14 +21,12 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum role = UserRoleEnum.USER;
+    private Long hubId;
 
     private boolean isDelete = false;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 }
