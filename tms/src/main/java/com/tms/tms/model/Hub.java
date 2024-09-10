@@ -1,5 +1,6 @@
 package com.tms.tms.model;
 
+import com.tms.tms.dto.HubRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,12 @@ public class Hub {
 
     private boolean isDelete = false;
 
-    @OneToMany(mappedBy = "hub", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> storeList = new ArrayList<>();
+    @OneToMany(mappedBy = "hub")
+    private List<Store> storeList = new ArrayList<>();
+
+    public Hub(HubRequestDto hubRequestDto){
+        this.hubRegion = hubRequestDto.getHubRegion();
+        this.hubAddressX = hubRequestDto.getHubAddressX();
+        this.hubAddressY = hubRequestDto.getHubAddressY();
+    }
 }

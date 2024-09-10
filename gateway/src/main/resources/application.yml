@@ -9,7 +9,8 @@ spring:
         - id: auth-service
           uri: lb://auth-service
           predicates:
-            - Path=/users/** #auth? ???
+            - Path=/auth/**
+            - Path=/users/**
         - id: tms-service
           uri: lb://tms-service
           predicates:
