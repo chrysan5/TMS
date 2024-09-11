@@ -14,7 +14,8 @@ spring:
         - id: tms-service
           uri: lb://tms-service
           predicates:
-            - Path=/**
+            - Path=/hubs/**
+
       discovery:
         locator:
           enabled: true
