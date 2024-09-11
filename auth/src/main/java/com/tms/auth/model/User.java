@@ -1,5 +1,6 @@
 package com.tms.auth.model;
 
+import com.tms.auth.dto.SignupRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "p_users")
-public class User {
+public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -32,5 +33,10 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public void updateUser(SignupRequestDto signupRequestDto){
+        this.username = signupRequestDto.getUsername();
+        this.password = signupRequestDto.getPassword();
     }
 }
