@@ -17,17 +17,24 @@ public abstract class Timestamped {
 
     @CreatedDate
     @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime modifiedAt;
 
     @CreatedBy
     @Column(updatable = false)
     private String createdBy;
 
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
+
     @LastModifiedBy
     private String modifiedBy;
+
+    private LocalDateTime deletedAt;
+
+    private String deletedBy;
+
+    public void delete(String deletedBy){
+        this.deletedAt = LocalDateTime.now();
+        this.deletedBy = deletedBy;
+    }
 }

@@ -4,9 +4,13 @@ import com.tms.tms.dto.HubRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 import java.util.ArrayList;
 import java.util.List;
 
+@SQLRestriction("is_delete = false")
+@Setter
 @Getter
 @NoArgsConstructor
 @Entity
@@ -34,4 +38,11 @@ public class Hub extends Timestamped {
         this.hubAddressX = hubRequestDto.getHubAddressX();
         this.hubAddressY = hubRequestDto.getHubAddressY();
     }
+
+    public void updateHub(HubRequestDto hubRequestDto){
+        this.hubRegion = hubRequestDto.getHubRegion();
+        this.hubAddressX = hubRequestDto.getHubAddressX();
+        this.hubAddressY = hubRequestDto.getHubAddressY();
+    }
+
 }
