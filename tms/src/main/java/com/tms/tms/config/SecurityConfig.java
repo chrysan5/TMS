@@ -28,7 +28,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // :TODO 상품 서비스 security 설정
 
         // CSRF disable
         http.csrf(AbstractHttpConfigurer::disable);

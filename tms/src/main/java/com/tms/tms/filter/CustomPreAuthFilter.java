@@ -22,7 +22,6 @@ public class CustomPreAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // :TODO 상품 서비스 선처리 필터 작성
         // 헤더에서 사용자 정보와 역할(Role)을 추출
         String username = request.getHeader("X-username");
         String rolesHeader = request.getHeader("X-role");

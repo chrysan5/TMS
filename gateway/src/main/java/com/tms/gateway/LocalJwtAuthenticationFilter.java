@@ -12,6 +12,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -68,7 +69,6 @@ public class LocalJwtAuthenticationFilter implements GlobalFilter {
             exchange.getRequest().mutate()
                     .header("X-username", claims.get("username").toString())
                     .header("X-role", claims.get("role").toString())
-                    .header("X-userId", claims.get("userId").toString())
                     .build();
 
             return true;
