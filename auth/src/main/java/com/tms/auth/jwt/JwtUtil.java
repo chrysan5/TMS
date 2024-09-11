@@ -49,8 +49,8 @@ public class JwtUtil {
                         .compact();
     }
 
-    //gateway에서 처리함
-    /*// header 에서 JWT 가져오기
+    //gateway에서 처리하도록 분리, 해당 서비스에서 인증 객체 사용을 위해 필요
+    // header 에서 JWT 가져오기
     public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
@@ -81,5 +81,5 @@ public class JwtUtil {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parser().setSigningKey(key).build().parseClaimsJws(token).getBody();
 
-    }*/
+    }
 }
