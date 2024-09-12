@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class HubService {
-    private HubRepository hubRepository;
+    private final HubRepository hubRepository;
 
     @Transactional
     public HubResponseDto createHub(@Valid HubRequestDto hubRequestDto) {
@@ -31,29 +31,21 @@ public class HubService {
 
     @Transactional
     public HubResponseDto updateHub(Long hubId, @Valid HubRequestDto hubRequestDto) {
-        Hub hub = hubRepository.findById(hubId).orElseThrow(
-                () -> new TmsCustomException(ErrorCode.NOT_FOUND_HUB)
-        );
-
+        Hub hub = findByIdOrElseThrow(hubId);
         hub.updateHub(hubRequestDto);
         return new HubResponseDto(hub);
     }
 
     @Transactional
     public void deleteHub(Long hubId, String username) {
-        Hub hub = hubRepository.findById(hubId).orElseThrow(
-                () -> new TmsCustomException(ErrorCode.NOT_FOUND_HUB)
-        );
+        Hub hub = findByIdOrElseThrow(hubId);
 
         hub.setDelete(true);
         hub.delete(username);
     }
 
     public HubResponseDto getHub(Long hubId) {
-        Hub hub = hubRepository.findById(hubId).orElseThrow(
-                () -> new TmsCustomException(ErrorCode.NOT_FOUND_HUB)
-        );
-
+        Hub hub = findByIdOrElseThrow(hubId);
         return new HubResponseDto(hub);
     }
 
@@ -71,5 +63,11 @@ public class HubService {
         return hubList.stream()
                 .map(HubResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public Hub findByIdOrElseThrow(Long hubId){
+        return hubRepository.findById(hubId).orElseThrow(
+                () -> new TmsCustomException(ErrorCode.NOT_FOUND_HUB)
+        );
     }
 }

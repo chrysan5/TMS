@@ -43,13 +43,11 @@ public class HubController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{hubId}")
     public ResponseEntity<HubResponseDto> getHub(@PathVariable("hubId") Long hubId){
         return ResponseEntity.ok(hubService.getHub(hubId));
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<Page<HubResponseDto>> getHubs(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -60,7 +58,6 @@ public class HubController {
         return ResponseEntity.ok(hubService.getHubs(page, size, sortBy, isAsc));
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/search")
     public ResponseEntity<List<HubResponseDto>> getHubSearch(@RequestParam("keyword") String keyword){
         return ResponseEntity.ok(hubService.getHubSearch(keyword));

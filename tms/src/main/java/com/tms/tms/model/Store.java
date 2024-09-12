@@ -28,7 +28,7 @@ public class Store extends Timestamped {
     private boolean isDelete = false;
 
     @Column(nullable = false)
-    private String userId;
+    private String username; //userId를 대신함
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> productList = new ArrayList<>();
@@ -41,11 +41,11 @@ public class Store extends Timestamped {
     private List<Order> orderList = new ArrayList<>();
 
 
-    public Store(StoreRequestDto storeRequestDto, String userId, Hub hub){
+    public Store(StoreRequestDto storeRequestDto, String username, Hub hub){
         this.storeName = storeRequestDto.getStoreName();
         this.storeAddress = storeRequestDto.getStoreAddress();
+        this.username = username;
         this.hub = hub;
-        this.userId = userId;
     }
 
     public void updateStore(StoreRequestDto storeRequestDto, Hub hub){
