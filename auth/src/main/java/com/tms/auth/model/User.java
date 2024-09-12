@@ -1,6 +1,6 @@
 package com.tms.auth.model;
 
-import com.tms.auth.dto.SignupRequestDto;
+import com.tms.auth.dto.UserRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,8 +35,9 @@ public class User extends Timestamped {
         this.password = password;
     }
 
-    public void updateUser(SignupRequestDto signupRequestDto){
-        this.username = signupRequestDto.getUsername();
-        this.password = signupRequestDto.getPassword();
+    public void updateUser(UserRequestDto userRequestDto, String password){
+        this.username = userRequestDto.getUsername();
+        this.password = password;
+        this.role = UserRoleEnum.valueOf(userRequestDto.getRole());
     }
 }
