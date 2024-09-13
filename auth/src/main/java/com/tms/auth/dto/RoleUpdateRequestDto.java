@@ -8,9 +8,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class UserRequestDto {
-    @NotBlank
-    private String username;
-    @NotBlank
-    private String password;
+public class RoleUpdateRequestDto {
+    @NotBlank(message = "role을 입력해 주세요.")
+    private String role;
+    private Long hubId;
 }

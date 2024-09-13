@@ -15,6 +15,7 @@ public enum ErrorCode {
 
     //404 not found
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
+    NOT_FOUND_DELIVERY_USER(HttpStatus.NOT_FOUND, "delivery user가 존재하지 않습니다."),
     ;
 
     private final HttpStatus status;

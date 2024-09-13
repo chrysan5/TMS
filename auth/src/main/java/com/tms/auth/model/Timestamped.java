@@ -37,4 +37,9 @@ public abstract class Timestamped {
         this.deletedAt = LocalDateTime.now();
         this.deletedBy = deletedBy;
     }
+
+    public void activate(){
+        this.deletedAt = null;
+        this.deletedBy = null;
+    }
 }

@@ -1,11 +1,12 @@
 package com.tms.auth.model;
 
-import com.tms.auth.dto.UserRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
+@SQLRestriction("is_delete = false")
 @Setter
 @Getter
 @NoArgsConstructor
@@ -35,9 +36,8 @@ public class User extends Timestamped {
         this.password = password;
     }
 
-    public void updateUser(UserRequestDto userRequestDto, String password){
-        this.username = userRequestDto.getUsername();
+    public void updateUser(String username, String password){
+        this.username = username;
         this.password = password;
-        this.role = UserRoleEnum.valueOf(userRequestDto.getRole());
     }
 }

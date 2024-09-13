@@ -1,5 +1,6 @@
 package com.tms.auth.controller;
 
+import com.tms.auth.dto.RoleUpdateRequestDto;
 import com.tms.auth.dto.UserRequestDto;
 import com.tms.auth.dto.UserResponseDto;
 import com.tms.auth.security.UserDetailsImpl;
@@ -27,14 +28,23 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signup(userRequestDto));
     }
 
-
     @PreAuthorize("hasAuthority('MASTER')")
     @PutMapping("/{userId}")
     public ResponseEntity<UserResponseDto> updateUser(
-            @RequestBody UserRequestDto requestDto,
+            @Valid @RequestBody UserRequestDto requestDto,
             @PathVariable("userId") Long userId
     ) {
         return ResponseEntity.ok(userService.updateUser(requestDto, userId));
+    }
+
+    //기본 가입시 USER 권한으로 가입 -> 이후 권한을 변경시 권한이 HUB일 경우 delivery_user 생성됨
+    @PreAuthorize("hasAuthority('MASTER')")
+    @PutMapping("/{userId}/role")
+    public ResponseEntity<UserResponseDto> updateUserRole(
+            @Valid @RequestBody RoleUpdateRequestDto requestDto,
+            @PathVariable("userId") Long userId
+    ) {
+        return ResponseEntity.ok(userService.updateUserRole(requestDto, userId));
     }
 
     @PreAuthorize("hasAuthority('MASTER')")
