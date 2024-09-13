@@ -1,5 +1,6 @@
 package com.tms.tms.service;
 
+import com.tms.tms.dto.ProductResponseDto;
 import com.tms.tms.dto.StoreRequestDto;
 import com.tms.tms.dto.StoreResponseDto;
 import com.tms.tms.exception.ErrorCode;
@@ -97,11 +98,27 @@ public class StoreService {
     }
 
 
+    public List<ProductResponseDto> getProductByStore(Long storeId) {
+        Store store = findByIdOrElseThrow(storeId);
+        List<Product> productList = productRepository.findAllByStore(store);
+
+        return productList.stream()
+                .map(ProductResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductResponseDto> getProductSearchByStore(Long storeId, String keyword) {
+        Store store = findByIdOrElseThrow(storeId);
+        List<Product> productList = productRepository.findAllByStoreAndProductNameContaining(store, keyword);
+
+        return productList.stream()
+                .map(ProductResponseDto::new)
+                .collect(Collectors.toList());
+    }
 
     public Store findByIdOrElseThrow(Long storeId){
         return storeRepository.findById(storeId).orElseThrow(
                 () -> new TmsCustomException(ErrorCode.NOT_FOUND_STORE)
         );
     }
-
 }

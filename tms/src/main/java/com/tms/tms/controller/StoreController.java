@@ -70,18 +70,19 @@ public class StoreController {
         return ResponseEntity.ok(storeService.getStores(page, size, sortBy, isAsc));
     }
 
-    //가게별 상품 조회
-    @GetMapping("/{storeId}/products")
-    public ResponseEntity<List<ProductResponseDto>> getProductByStoreId(
-            @PathVariable("storeId") Long storeId){
-        return ResponseEntity.ok(productService.getProductByStore(storeId));
-    }
-
     //가게 검색
     @GetMapping("/search")
     public ResponseEntity<List<StoreResponseDto>> getStoreSearch(
             @RequestParam("keyword") String keyword){
         return ResponseEntity.ok(storeService.getStoreSearch(keyword));
+    }
+
+
+    //가게별 상품 조회
+    @GetMapping("/{storeId}/products")
+    public ResponseEntity<List<ProductResponseDto>> getProductByStore(
+            @PathVariable("storeId") Long storeId){
+        return ResponseEntity.ok(storeService.getProductByStore(storeId));
     }
 
     //가게별 상품 검색
@@ -90,7 +91,7 @@ public class StoreController {
             @PathVariable("storeId") Long storeId,
             @RequestParam("keyword") String keyword
     ){
-        return ResponseEntity.ok(productService.getProductSearchByStore(storeId, keyword));
+        return ResponseEntity.ok(storeService.getProductSearchByStore(storeId, keyword));
     }
 
 }

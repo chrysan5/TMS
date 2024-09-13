@@ -4,6 +4,9 @@ import com.tms.tms.model.Store;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Getter
 @NoArgsConstructor
@@ -13,7 +16,7 @@ public class StoreResponseDto {
     private String storeAddress;
     private String username;
     private Long hubId;
-    //private List<Product> productList;
+    private List<ProductResponseDto> productList;
 
     public StoreResponseDto(Store store){
         this.storeId = store.getStoreId();
@@ -21,6 +24,6 @@ public class StoreResponseDto {
         this.storeAddress = store.getStoreAddress();
         this.username = store.getUsername();
         this.hubId = store.getHub().getHubId();
-        //this.productList = store.getProductList();
+        this.productList = store.getProductList().stream().map(ProductResponseDto::new).collect(Collectors.toList());
     }
 }

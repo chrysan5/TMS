@@ -79,26 +79,6 @@ public class ProductService {
     }
 
 
-    public List<ProductResponseDto> getProductByStore(Long storeId) {
-        Store store = storeService.findByIdOrElseThrow(storeId);
-        List<Product> productList = productRepository.findAllByStore(store);
-
-        return productList.stream()
-                .map(ProductResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
-
-    public List<ProductResponseDto> getProductSearchByStore(Long storeId, String keyword) {
-        Store store = storeService.findByIdOrElseThrow(storeId);
-        List<Product> productList = productRepository.findAllByStoreAndProductNameContaining(store, keyword);
-
-        return productList.stream()
-                .map(ProductResponseDto::new)
-                .collect(Collectors.toList());
-
-    }
-
 
     public Product findByIdOrElseThrow(Long productId){
         return productRepository.findById(productId).orElseThrow(
