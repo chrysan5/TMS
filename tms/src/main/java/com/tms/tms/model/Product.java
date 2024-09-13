@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
+@SQLRestriction("is_delete = false")
 @Setter
 @Getter
 @NoArgsConstructor

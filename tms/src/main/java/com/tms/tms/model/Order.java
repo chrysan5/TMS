@@ -3,7 +3,9 @@ package com.tms.tms.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
+@SQLRestriction("is_delete = false")
 @Getter
 @NoArgsConstructor
 @Entity
