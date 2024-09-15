@@ -1,11 +1,14 @@
 package com.tms.tms.model;
 
+import com.tms.tms.dto.OrderRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 
 @SQLRestriction("is_delete = false")
+@Setter
 @Getter
 @NoArgsConstructor
 @Entity
@@ -21,17 +24,17 @@ public class Order extends Timestamped {
     private OrderState state;
 
     @Column(nullable = false)
-    private String receive_store_id;
+    private Long receiveStoreId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderLocation location;
 
     @Column(nullable = false)
-    private String startHubId;
+    private Long startHubId;
 
     @Column(nullable = false)
-    private String endHubId;
+    private Long endHubId;
 
     private boolean isDelete = false;
 
@@ -47,4 +50,24 @@ public class Order extends Timestamped {
 
     private Integer productQuantity;
 
+    public Order(OrderRequestDto requestDto, Long endHubId, Store store, Product product){
+        this.state = OrderState.ORDERED;
+        this.receiveStoreId = requestDto.getReceiveStoreId();
+        this.location = OrderLocation.PENDING;
+        this.startHubId = store.getHub().getHubId();
+        this.endHubId = endHubId;
+        this.store = store;
+        this.product = product;
+        this.productQuantity = requestDto.getProductQuantity();
+    }
+
+    public void updateOrder(OrderRequestDto requestDto, Long endHubId, Product product){
+        this.state = OrderState.ORDERED;
+        this.receiveStoreId = requestDto.getReceiveStoreId();
+        this.location = OrderLocation.PENDING;
+        this.startHubId = store.getHub().getHubId();
+        this.endHubId = endHubId;
+        this.product = product;
+        this.productQuantity = requestDto.getProductQuantity();
+    }
 }

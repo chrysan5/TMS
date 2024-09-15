@@ -3,7 +3,6 @@ package com.tms.tms.controller;
 import com.tms.tms.dto.ProductResponseDto;
 import com.tms.tms.dto.StoreRequestDto;
 import com.tms.tms.dto.StoreResponseDto;
-import com.tms.tms.service.ProductService;
 import com.tms.tms.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.List;
 @RestController
 public class StoreController {
     private final StoreService storeService;
-    private final ProductService productService;
 
     @PreAuthorize("hasAnyAuthority('MASTER', 'STORE')")
     @PostMapping
