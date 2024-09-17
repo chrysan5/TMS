@@ -1,40 +1,33 @@
+server:
+  port: 19095
+
 spring:
   application:
     name: auth-service
 
----
-server:
-  port: 19095
-
----
-spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/tms
+    #url: jdbc:mysql://localhost:3306/tms
+    url: jdbc:mysql://host.docker.internal:3306/tms #도커 컴포즈로 띄우기 위한 설정
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
----
-spring:
   jpa:
     hibernate:
       ddl-auto: update
----
-spring:
-  jpa:
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         use_sql_comments: true
 
----
 jwt:
   secret:
     key: "401b09eab3c013d4ca54922bb802bec8fd5318192b0a75f201d8b3727429080fb337591abd3e44453b954555b7a0812e1081c39b740293f765eae731f5a65ed1"
 
----
+
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      #defaultZone: http://localhost:19090/eureka/
+      defaultZone: http://eureka:19090/eureka/ #도커 컴포즈로 띄우기 위한 설정
