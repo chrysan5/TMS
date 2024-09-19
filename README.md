@@ -88,14 +88,14 @@ cd tms
 ## 트러블 슈팅
 
 - JPA 양방향 연관관계에서 순환참조 문제 -> responseDto에서 엔티티가 아닌 dto를 반환하도록 변경하였다.
-https://github.com/chrysan5/tmsSystem/commit/664ccde5dadae19a28fd61c826e4079cc62adab7#diff-951fa22d343c74f8435612a30b1df4fa944eacd9bd47dff4ff295cdedbe4b486L16
+  - https://github.com/chrysan5/tmsSystem/commit/664ccde5dadae19a28fd61c826e4079cc62adab7#diff-951fa22d343c74f8435612a30b1df4fa944eacd9bd47dff4ff295cdedbe4b486L16
 
 - auditing 적용시 인증 객체가 있어야 하지만 인증 객체는 Auth 서비스만 가지고 있었다. -> jwt 토큰에 들어있는 정보로 인증객체 만드는 필터를 적용하여 사용하였다
-https://github.com/chrysan5/tmsSystem/commit/b696356aa7163dfae28bb37106cd49b08e2091da
+  - https://github.com/chrysan5/tmsSystem/commit/b696356aa7163dfae28bb37106cd49b08e2091da
   
 - @SQLRestriction("is_delete = false")로 논리적 삭제를 구현하였으나, is_delete=true까지 모두 조회해야하는 경우 발생 - nativeQuery = true 조건을 사용하여 해결하였다.
-https://github.com/chrysan5/tmsSystem/commit/59cf9851dcbdbea528c512366061fa12346a5bdc#diff-46485dc7ed2739c7a2ddd978e96a8a6a32a96ff4e3f5ece63cea394073420b7e
+  - https://github.com/chrysan5/tmsSystem/commit/59cf9851dcbdbea528c512366061fa12346a5bdc#diff-46485dc7ed2739c7a2ddd978e96a8a6a32a96ff4e3f5ece63cea394073420b7e
   
 - 스케줄러를 tms 서비스에서 실행하려 했더니 403 forbidden 에러가 뜨며 권한을 확인하였다(로그인을 해야하는 상황) -> 원인은 slack 메시지를 저장하는 과정에서 auditing시 createBy 값이 인증객체가 없어서 null로 들어갔기 때문이다. 따라서 인증객체가 없을 경우도 insert 가능하도록 로직을 수정하고 스케줄러를 서비스단 로직만 가져오게 하여 해결하였다.
-https://github.com/chrysan5/tmsSystem/commit/de6070490c07ef451dc3f2bc7dca08b3b1bd67ba#diff-1c1c1a2466ef5f33a32b5fa5f9ac8e10e72c32b211a1e9b56fe79d9e7c246d62
-https://github.com/chrysan5/tmsSystem/commit/c035cd81d664603db5baeaa12a8864fdc7e79362
+  - https://github.com/chrysan5/tmsSystem/commit/de6070490c07ef451dc3f2bc7dca08b3b1bd67ba#diff-1c1c1a2466ef5f33a32b5fa5f9ac8e10e72c32b211a1e9b56fe79d9e7c246d62
+  - https://github.com/chrysan5/tmsSystem/commit/c035cd81d664603db5baeaa12a8864fdc7e79362
