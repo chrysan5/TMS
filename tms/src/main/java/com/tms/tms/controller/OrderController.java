@@ -2,7 +2,6 @@ package com.tms.tms.controller;
 
 import com.tms.tms.dto.OrderRequestDto;
 import com.tms.tms.dto.OrderResponseDto;
-import com.tms.tms.dto.StoreResponseDto;
 import com.tms.tms.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
