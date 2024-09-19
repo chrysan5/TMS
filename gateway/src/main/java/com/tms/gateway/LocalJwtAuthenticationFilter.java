@@ -1,6 +1,6 @@
 package com.tms.gateway;
 
-import com.tms.gateway.application.AuthService;
+import com.tms.gateway.application.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +12,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -25,12 +24,12 @@ public class LocalJwtAuthenticationFilter implements GlobalFilter {
 
     private final String secretKey;
 
-    private final AuthService authService;
+    private final UserService userService;
 
     // FeignClient 와 Global Filter 의 순환참조 문제가 발생하여 Bean 초기 로딩 시 순환을 막기 위해 @Lazy 어노테이션을 추가
-    public LocalJwtAuthenticationFilter(@Value("${jwt.secret.key}") String secretKey, @Lazy AuthService authService) {
+    public LocalJwtAuthenticationFilter(@Value("${jwt.secret.key}") String secretKey, @Lazy UserService userSerivce) {
         this.secretKey = secretKey;
-        this.authService = authService;
+        this.userService = userSerivce;
     }
 
 
@@ -76,7 +75,7 @@ public class LocalJwtAuthenticationFilter implements GlobalFilter {
             //생성된 토큰이 최신정보 담고있지 않으므로 jwt 값을 검증함 -이부분이 순환참조를 3번 일으킴
             /*if (claimsJws.getPayload().get("username") != null) {
                 String username = claimsJws.getPayload().get("username").toString();
-                return authService.verifyUser(username);
+                return userService.verifyUser(username);
             } else {
                 return false;
             }*/

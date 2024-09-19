@@ -5,7 +5,7 @@ import com.tms.tms.dto.StoreRequestDto;
 import com.tms.tms.dto.StoreResponseDto;
 import com.tms.tms.service.StoreService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RequestMapping("/stores")
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RestController
 public class StoreController {
     private final StoreService storeService;

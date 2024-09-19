@@ -1,5 +1,6 @@
 package com.tms.tms.service;
 
+import com.tms.tms.application.UserService;
 import com.tms.tms.dto.ProductResponseDto;
 import com.tms.tms.dto.StoreRequestDto;
 import com.tms.tms.dto.StoreResponseDto;
@@ -11,7 +12,7 @@ import com.tms.tms.model.Store;
 import com.tms.tms.repository.ProductRepository;
 import com.tms.tms.repository.StoreRepository;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,15 +24,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class StoreService {
     private final StoreRepository storeRepository;
     private final HubService hubService;
     private final ProductRepository productRepository;
+    private final UserService userService;
+
+    public StoreService(StoreRepository storeRepository, HubService hubService, ProductRepository productRepository, @Lazy UserService userService){
+        this.storeRepository = storeRepository;
+        this.hubService = hubService;
+        this.productRepository = productRepository;
+        this.userService = userService;
+    }
 
 
     @Transactional
     public StoreResponseDto createStore(@Valid StoreRequestDto storeRequestDto, String username) {
+        //유저 한번더 확인
+        if(!userService.verifyUser(username)) {
+            throw new TmsCustomException(ErrorCode.NOT_FOUND_USER);
+        }
+
         Hub hub = hubService.findByIdOrElseThrow(storeRequestDto.getHubId());
         Store store =  storeRepository.save(new Store(storeRequestDto, username, hub));
         return new StoreResponseDto(store);
@@ -39,6 +52,10 @@ public class StoreService {
 
     @Transactional
     public StoreResponseDto updateStore(Long storeId, @Valid StoreRequestDto storeRequestDto, String username, String role) {
+        if(!userService.verifyUser(username)) {
+            throw new TmsCustomException(ErrorCode.NOT_FOUND_USER);
+        }
+
         Store store = findByIdOrElseThrow(storeId);
 
         if(role.equals("STORE")){
@@ -54,6 +71,10 @@ public class StoreService {
 
     @Transactional
     public void deleteStore(Long storeId, String username, String role) {
+        if(!userService.verifyUser(username)) {
+            throw new TmsCustomException(ErrorCode.NOT_FOUND_USER);
+        }
+
         Store store = findByIdOrElseThrow(storeId);
 
         if(role.equals("STORE")){
@@ -72,11 +93,10 @@ public class StoreService {
         store.delete(username);
     }
 
+
     public StoreResponseDto getStore(Long storeId) {
         return new StoreResponseDto(findByIdOrElseThrow(storeId));
     }
-
-
 
 
     public Page<StoreResponseDto> getStores(int page, int size, String sortBy, boolean isAsc) {
