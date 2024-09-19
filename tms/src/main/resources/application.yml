@@ -32,3 +32,19 @@ eureka:
     service-url:
       #defaultZone: http://localhost:19090/eureka/
       defaultZone: http://eureka:19090/eureka/ #도커 컴포즈로 띄우기 위한 설정
+
+
+gemini:
+  api:
+    url: "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent"
+    key: ${GEMINI_KEY}
+
+public:
+  portal:
+    url: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"
+    key: ${PUBLIC_PORTAL_KEY}
+
+slack:
+  api:
+    url: "https://slack.com/api/chat.postMessage"
+    token: ${SLACK_TOKEN}

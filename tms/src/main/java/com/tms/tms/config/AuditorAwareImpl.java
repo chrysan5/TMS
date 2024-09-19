@@ -13,14 +13,19 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof String) {
-            return Optional.of((String) principal);
+        Object principal = null;
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }
 
-        if (principal instanceof Principal) {
-            return Optional.ofNullable(((Principal) principal).getName());
+        if (principal != null) {
+            if (principal instanceof String) {
+                return Optional.of((String) principal);
+            }
+
+            if (principal instanceof Principal) {
+                return Optional.ofNullable(((Principal) principal).getName());
+            }
         }
 
         return Optional.empty();

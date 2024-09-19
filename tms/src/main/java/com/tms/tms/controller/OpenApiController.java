@@ -40,4 +40,11 @@ public class OpenApiController {
         return ResponseEntity.ok(openAPiService.combineWeatherAndGeminiAPi(hubId));
     }
 
+
+    @GetMapping("/sendMsg")
+    public ResponseEntity<String> sendSlackMsg(@RequestParam String msg) throws IOException {
+        openAPiService.sendSlackMsg(msg);
+        return ResponseEntity.ok().build();
+    }
+
 }
