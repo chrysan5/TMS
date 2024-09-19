@@ -13,7 +13,7 @@ public class HubRequestDto {
     @NotBlank(message = "허브 지역을 입력해주세요.")
     private String hubRegion;
     @NotNull
-    private double hubAddressX;
+    private String hubAddressX;
     @NotNull
-    private double hubAddressY;
+    private String hubAddressY;
 }

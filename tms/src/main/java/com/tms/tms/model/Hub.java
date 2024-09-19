@@ -24,9 +24,9 @@ public class Hub extends Timestamped {
     @Column(nullable = false, unique = true)
     private String hubRegion;
 
-    private double hubAddressX;
+    private String hubAddressX;
 
-    private double hubAddressY;
+    private String hubAddressY;
 
     private boolean isDelete = false;
 

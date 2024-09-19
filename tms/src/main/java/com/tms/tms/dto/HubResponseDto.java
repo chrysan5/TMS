@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 public class HubResponseDto {
     private Long hubId;
     private String hubRegion;
-    private double hubAddressX;
-    private double hubAddressY;
+    private String hubAddressX;
+    private String hubAddressY;
 
     public HubResponseDto(Hub hub){
         this.hubId = hub.getHubId();
