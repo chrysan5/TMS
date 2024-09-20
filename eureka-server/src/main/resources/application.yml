@@ -10,15 +10,10 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     #service-url:
-    #  defaultZone=http://localhost:19090/eureka/
-    #?? ???? ??? ?? ??
+    #  defaultZone: http://localhost:19090/eureka/
     service-url:
-      defaultZone: http://eureka:19090/eureka/
-
-
-#?? ???? ??? ?? ??
-#eureka:
+      defaultZone: http://eureka:19090/eureka/ #도커 컴포즈 사용시 설정
   #instance:
-    #hostname: localhost
+  #  hostname: localhost #로컬 테스트용 설정 (도커 컴포즈 사용시 지우기)
 
 
