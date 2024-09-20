@@ -1,0 +1,26 @@
+services:
+  eureka:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=./eureka-server
+
+  gateway:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=./gateway
+    ports:
+      - "19091:19091"
+
+  auth:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=./auth
+
+  tms:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=./tms
