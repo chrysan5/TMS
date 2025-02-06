@@ -1,5 +1,6 @@
 package com.tms.auth.model;
 
+import com.tms.auth.dto.UserRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +25,11 @@ public class DeliveryUser extends Timestamped {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private Long hubId;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DeliveryType deliveryType;
 
     private boolean isDelete = false;
 
@@ -40,8 +44,19 @@ public class DeliveryUser extends Timestamped {
         this.user = user;
     }
 
-    public void updateDeliveryUser(String username, String password){
-        this.username = username;
+    public DeliveryUser(UserRequestDto userRequestDto, User user) {
+        this.username = userRequestDto.getUsername();
+        this.password = userRequestDto.getPassword();
+        this.hubId = userRequestDto.getHubId();
+        this.user = user;
+        this.deliveryType = DeliveryType.valueOf(userRequestDto.getDeliveryType());
+    }
+
+    public void updateDeliveryUser(UserRequestDto requestDto, String password, User user){
+        this.username = requestDto.getUsername();
         this.password = password;
+        this.hubId = requestDto.getHubId();
+        this.user = user;
+        this.deliveryType = DeliveryType.valueOf(requestDto.getDeliveryType());
     }
 }

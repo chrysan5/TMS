@@ -28,6 +28,9 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role = UserRoleEnum.USER;
 
+    @OneToOne(mappedBy = "user")
+    private DeliveryUser deliveryUser;
+
     private boolean isDelete = false;
 
 
