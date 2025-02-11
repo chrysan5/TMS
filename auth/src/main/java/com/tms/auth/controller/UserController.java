@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RequestMapping("users")
 @Controller
@@ -21,14 +22,14 @@ public class UserController {
 
     private final UserService userService;
 
-    //마스터 권한만 유저 생성,수정,삭제 가능
-    @PreAuthorize("hasAuthority('MASTER')")
+    //회원 가입
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> signup(@Valid @RequestBody UserRequestDto userRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signup(userRequestDto));
     }
 
-    @PreAuthorize("hasAuthority('MASTER')")
+    //회원 정보 수정
+    @PreAuthorize("hasAuthority('ROLE_MASTER') or isAuthenticated()")
     @PutMapping("/{userId}")
     public ResponseEntity<UserResponseDto> updateUser(
             @Valid @RequestBody UserRequestDto requestDto,
@@ -37,8 +38,8 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(requestDto, userId));
     }
 
-    //기본 가입시 USER 권한으로 가입 -> 이후 권한을 변경시 권한이 HUB일 경우 delivery_user 생성됨
-    @PreAuthorize("hasAuthority('MASTER')")
+    //기본 가입시 USER 권한으로 가입 후 권한 변경시킴
+    @PreAuthorize("hasAuthority('ROLE_MASTER')")
     @PutMapping("/{userId}/role")
     public ResponseEntity<UserResponseDto> updateUserRole(
             @Valid @RequestBody RoleUpdateRequestDto requestDto,
@@ -47,19 +48,36 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUserRole(requestDto, userId));
     }
 
-    @PreAuthorize("hasAuthority('MASTER')")
+    //유저 삭제 및 회원 탈퇴
+    @PreAuthorize("hasAuthority('ROLE_MASTER') or isAuthenticated()")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable("userId") Long userId){
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 
+    //본인 정보 조회
     @GetMapping
     public ResponseEntity<UserResponseDto> getUser(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return ResponseEntity.ok(userService.getUser(userDetails.getUser().getUserId()));
     }
 
+    //전체 유저 조회, 삭제된 유저 조회 합쳐서 조건별로 검색 가능하도록 querydsl 만들어보기
+    //전체 유저 조회
+    @PreAuthorize("hasAuthority('ROLE_MASTER')") //왜 403 뜨는지 모르겠음
+    @GetMapping("/list")
+    public ResponseEntity<List<UserResponseDto>> getUsers(){
+        return ResponseEntity.ok(userService.getUsers());
+    }
 
+    //삭제된 유저 리스트 조회
+    @PreAuthorize("hasAuthority('ROLE_MASTER')")
+    @GetMapping("/list-all")
+    public ResponseEntity<List<UserResponseDto>> getAllUsersIncludeDeleted(){
+        return ResponseEntity.ok(userService.getAllUsersIncludeDeleted());
+    }
+
+    //유저 확인
     @GetMapping("/verify")
     public ResponseEntity<Boolean> verifyUser(@RequestParam(value = "username") String username) {
         return ResponseEntity.ok(userService.verifyUser(username));

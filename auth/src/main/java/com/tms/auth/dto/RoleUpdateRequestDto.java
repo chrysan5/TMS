@@ -11,5 +11,4 @@ import lombok.Setter;
 public class RoleUpdateRequestDto {
     @NotBlank(message = "role을 입력해 주세요.")
     private String role;
-    private Long hubId;
 }

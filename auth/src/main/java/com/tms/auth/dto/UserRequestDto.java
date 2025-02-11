@@ -13,4 +13,6 @@ public class UserRequestDto {
     private String username;
     @NotBlank
     private String password;
+    private String deliveryType;
+    private Long hubId;
 }
