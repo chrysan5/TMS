@@ -7,6 +7,8 @@ import com.tms.auth.security.UserDetailsImpl;
 import com.tms.auth.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -62,20 +64,21 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(userDetails.getUser().getUserId()));
     }
 
-    //전체 유저 조회, 삭제된 유저 조회 합쳐서 조건별로 검색 가능하도록 querydsl 만들어보기
-    //전체 유저 조회
-    @PreAuthorize("hasAuthority('ROLE_MASTER')") //왜 403 뜨는지 모르겠음
+    //전체 유저 조회 (삭제된 유저 포함)
+    @PreAuthorize("hasAuthority('ROLE_MASTER')")
     @GetMapping("/list")
     public ResponseEntity<List<UserResponseDto>> getUsers(){
         return ResponseEntity.ok(userService.getUsers());
     }
 
-    //삭제된 유저 리스트 조회
+    //전체 유저 조회 및 검색
+    //예시) localhost:19091/users/search?page=0&size=10&sort=username,asc&isDelete=false
     @PreAuthorize("hasAuthority('ROLE_MASTER')")
-    @GetMapping("/list-all")
-    public ResponseEntity<List<UserResponseDto>> getAllUsersIncludeDeleted(){
-        return ResponseEntity.ok(userService.getAllUsersIncludeDeleted());
+    @GetMapping("/search")
+    public ResponseEntity<Page<UserResponseDto>> searchUsers(UserRequestDto userRequestDto, Pageable pageable){
+        return ResponseEntity.ok(userService.searchUsers(userRequestDto, pageable));
     }
+
 
     //유저 확인
     @GetMapping("/verify")

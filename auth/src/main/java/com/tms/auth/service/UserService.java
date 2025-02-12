@@ -11,6 +11,8 @@ import com.tms.auth.model.UserRoleEnum;
 import com.tms.auth.repository.DeliveryUserRepository;
 import com.tms.auth.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -88,13 +90,13 @@ public class UserService {
             }
         }
 
-        user.setDelete(true);
+        user.setIsDelete(true);
         user.delete(user.getUsername());
 
         //delivery user가 있을 경우 같이 삭제
         Optional<DeliveryUser> deliveryUser = deliveryUserRepository.findByUser(user);
         if(deliveryUser.isPresent()){
-            deliveryUser.get().setDelete(true);
+            deliveryUser.get().setIsDelete(true);
             deliveryUser.get().delete(user.getUsername());
         }
     }
@@ -106,18 +108,16 @@ public class UserService {
 
 
     public List<UserResponseDto> getUsers() {
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAllUsersIncludeDeleted();
         return users.stream()
                 .map(UserResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    public List<UserResponseDto> getAllUsersIncludeDeleted(){
-        List<User> deletedUsers = userRepository.findAllUsersIncludeDeleted();
-        return deletedUsers.stream()
-                .map(UserResponseDto::new)
-                .collect(Collectors.toList());
+    public Page<UserResponseDto> searchUsers(UserRequestDto userRequestDto, Pageable pageable){
+        return userRepository.searchUsers(userRequestDto, pageable);
     }
+
 
 
     public Boolean verifyUser(String username) {

@@ -13,6 +13,7 @@ public class UserResponseDto {
     private String role;
     private String deliveryType;
     private Long hubId;
+    private Boolean isDelete;
 
     public UserResponseDto(User user){
         this.userId = user.getUserId();
@@ -20,6 +21,7 @@ public class UserResponseDto {
         this.role = String.valueOf(user.getRole());
         this.deliveryType = (user.getDeliveryUser() != null) ? String.valueOf(user.getDeliveryUser().getDeliveryType()) : null;
         this.hubId = (user.getDeliveryUser() != null && user.getDeliveryUser().getHubId() != null) ? user.getDeliveryUser().getHubId() : null;
+        this.isDelete = user.getIsDelete();
     }
 
     public UserResponseDto(DeliveryUser deliveryUser){
@@ -28,5 +30,6 @@ public class UserResponseDto {
         this.role = String.valueOf(deliveryUser.getUser().getRole());
         this.deliveryType = String.valueOf(deliveryUser.getDeliveryType());
         this.hubId = (deliveryUser.getHubId() != null) ? deliveryUser.getHubId() : null;
+        this.isDelete = deliveryUser.getIsDelete();
     }
 }

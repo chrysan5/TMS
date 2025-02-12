@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
     Optional<User> findByUsername(String username);
 
-    @Query(value = "SELECT * FROM p_users WHERE is_delete = true", nativeQuery = true)
+    @Query(value = "SELECT * FROM p_users", nativeQuery = true)
     List<User> findAllUsersIncludeDeleted();
 }

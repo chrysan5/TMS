@@ -15,4 +15,5 @@ public class UserRequestDto {
     private String password;
     private String deliveryType;
     private Long hubId;
+    private Boolean isDelete;
 }

@@ -31,7 +31,7 @@ public class DeliveryUser extends Timestamped {
     @Enumerated(EnumType.STRING)
     private DeliveryType deliveryType;
 
-    private boolean isDelete = false;
+    private Boolean isDelete = false;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

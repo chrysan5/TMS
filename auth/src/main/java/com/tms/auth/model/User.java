@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 
-@SQLRestriction("is_delete = false")
+@FilterDef(name = "deletedFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
+@Filter(name = "deletedFilter", condition = "is_delete = :isDeleted")
 @Setter
 @Getter
 @NoArgsConstructor
@@ -31,7 +34,7 @@ public class User extends Timestamped {
     @OneToOne(mappedBy = "user")
     private DeliveryUser deliveryUser;
 
-    private boolean isDelete = false;
+    private Boolean isDelete = false;
 
 
     public User(String username, String password) {
