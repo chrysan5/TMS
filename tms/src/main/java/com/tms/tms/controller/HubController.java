@@ -21,12 +21,14 @@ import java.util.List;
 public class HubController {
     private final HubService hubService;
 
+    //허브 생성
     @PreAuthorize("hasAuthority('MASTER')")
     @PostMapping
     public ResponseEntity<HubResponseDto> createHub(@Valid @RequestBody HubRequestDto hubRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(hubService.createHub(hubRequestDto));
     }
 
+    //허브 수정
     @PreAuthorize("hasAuthority('MASTER')")
     @PutMapping("/{hubId}")
     public ResponseEntity<HubResponseDto> updateHub(
@@ -36,6 +38,7 @@ public class HubController {
         return ResponseEntity.ok(hubService.updateHub(hubId, hubRequestDto));
     }
 
+    //허브 삭제
     @PreAuthorize("hasAuthority('MASTER')")
     @DeleteMapping("/{hubId}")
     public ResponseEntity deleteHub(@PathVariable("hubId") Long hubId, Principal principal){
@@ -43,11 +46,13 @@ public class HubController {
         return ResponseEntity.noContent().build();
     }
 
+    //허브 조회 (단일)
     @GetMapping("/{hubId}")
     public ResponseEntity<HubResponseDto> getHub(@PathVariable("hubId") Long hubId){
         return ResponseEntity.ok(hubService.getHub(hubId));
     }
 
+    //허브 리스트 조회
     @GetMapping
     public ResponseEntity<Page<HubResponseDto>> getHubs(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -58,6 +63,7 @@ public class HubController {
         return ResponseEntity.ok(hubService.getHubs(page, size, sortBy, isAsc));
     }
 
+    //허브 검색
     @GetMapping("/search")
     public ResponseEntity<List<HubResponseDto>> getHubSearch(@RequestParam("keyword") String keyword){
         return ResponseEntity.ok(hubService.getHubSearch(keyword));

@@ -20,6 +20,7 @@ public class OrderController {
     private final OrderService orderService;
 
     //모든 권한 가능
+    //주문 생성
     @PostMapping("/store/{storeId}")
     public ResponseEntity<OrderResponseDto> createOrder(
             @Valid @RequestBody OrderRequestDto requestDto,
@@ -29,6 +30,7 @@ public class OrderController {
                 .body(orderService.createOrder(requestDto, storeId));
     }
 
+    //주문 수정
     @PreAuthorize("hasAnyAuthority('MASTER', 'HUB', 'STORE')")
     @PutMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> updateOrder(
@@ -53,7 +55,7 @@ public class OrderController {
     }
 
 
-    //본인의 주문만 검색 가능
+    //주문 조회 : 본인의 주문만 조회 가능
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> getOrder(
             @PathVariable("orderId") Long orderId,
@@ -62,13 +64,13 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrder(orderId, username));
     }
     
-    //가게별 주문 보기
+    //가게별 주문 조회
     @GetMapping("/store/{storeId}")
     public ResponseEntity<List<OrderResponseDto>> getOrdersByStore(@PathVariable("storeId") Long storeId){
         return ResponseEntity.ok(orderService.getOrdersByStore(storeId));
     }
 
-    //orderLocation 변경
+    //배송 위치 변경
     //@PreAuthorize("hasAnyAuthority('MASTER', 'HUB')")
     @PutMapping("/{orderId}/location")
     public ResponseEntity<OrderResponseDto> updateOrderLocation(
@@ -78,7 +80,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateOrderLocation(location, orderId));
     }
 
-    //orderState 변경
+    //주문 상태 변경
     //@PreAuthorize("hasAnyAuthority('MASTER', 'HUB')")
     @PutMapping("/{orderId}/state")
     public ResponseEntity<OrderResponseDto> updateOrderState(

@@ -21,6 +21,7 @@ import java.util.List;
 public class StoreController {
     private final StoreService storeService;
 
+    //업체 생성
     @PreAuthorize("hasAnyAuthority('MASTER', 'STORE')")
     @PostMapping
     public ResponseEntity<StoreResponseDto> createStore(
@@ -30,6 +31,7 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.CREATED).body(storeService.createStore(storeRequestDto, principal.getName()));
     }
 
+    //업체 수정
     @PreAuthorize("hasAnyAuthority('MASTER', 'STORE')")
     @PutMapping("/{storeId}")
     public ResponseEntity<StoreResponseDto> updateStore(
@@ -41,6 +43,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.updateStore(storeId, StoreRequestDto, username, role));
     }
 
+    //업체 삭제
     @PreAuthorize("hasAnyAuthority('MASTER', 'STORE')")
     @DeleteMapping("/{storeId}")
     public ResponseEntity deleteStore(
@@ -52,12 +55,13 @@ public class StoreController {
         return ResponseEntity.noContent().build();
     }
 
+    //업체 조회 (단일)
     @GetMapping("/{storeId}")
     public ResponseEntity<StoreResponseDto> getStore(@PathVariable("storeId") Long storeId){
         return ResponseEntity.ok(storeService.getStore(storeId));
     }
 
-    //가게 전체 조회
+    //업체 리스트 조회
     @GetMapping
     public ResponseEntity<Page<StoreResponseDto>> getStores(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -68,7 +72,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.getStores(page, size, sortBy, isAsc));
     }
 
-    //가게 검색
+    //업체 검색
     @GetMapping("/search")
     public ResponseEntity<List<StoreResponseDto>> getStoreSearch(
             @RequestParam("keyword") String keyword){
@@ -76,14 +80,14 @@ public class StoreController {
     }
 
 
-    //가게별 상품 조회
+    //업체별 상품 조회
     @GetMapping("/{storeId}/products")
     public ResponseEntity<List<ProductResponseDto>> getProductByStore(
             @PathVariable("storeId") Long storeId){
         return ResponseEntity.ok(storeService.getProductByStore(storeId));
     }
 
-    //가게별 상품 검색
+    //업체별 상품 검색
     @GetMapping("/{storeId}/product/search")
     public ResponseEntity<List<ProductResponseDto>> getProductSearchByStore(
             @PathVariable("storeId") Long storeId,

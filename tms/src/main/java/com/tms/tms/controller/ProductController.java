@@ -18,12 +18,14 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
     private final ProductService productService;
 
+    //상품 추가
     @PreAuthorize("hasAnyAuthority('MASTER', 'STORE')")
     @PostMapping
     public ResponseEntity<ProductResponseDto> createProduct(@Valid @RequestBody ProductRequestDto productRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(productRequestDto));
     }
 
+    //상품정보 수정
     @PreAuthorize("hasAnyAuthority('MASTER', 'STORE')")
     @PutMapping("/{productId}")
     public ResponseEntity<ProductResponseDto> updateProduct(
@@ -35,6 +37,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateProduct(productId, productRequestDto, username, role));
     }
 
+    //상품 삭제
     @PreAuthorize("hasAnyAuthority('MASTER', 'STORE')")
     @DeleteMapping("/{productId}")
     public ResponseEntity deleteProduct(
@@ -46,6 +49,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    //상품 조회
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponseDto> getProduct(@PathVariable("productId") Long productId){
         return ResponseEntity.ok(productService.getProduct(productId));
