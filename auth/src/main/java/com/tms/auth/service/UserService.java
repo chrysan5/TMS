@@ -50,7 +50,7 @@ public class UserService {
 
         //MASTER 권한도 아니고, 본인이 아닌 경우 에러 발생
         if(!authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_MASTER"))){
-            if(!authentication.getName().equals(user.getUsername())){
+            if(!currentUserName.equals(user.getUsername())){
                 throw new TmsCustomException(ErrorCode.NOT_PERMITTED);
             }
         }
@@ -85,7 +85,7 @@ public class UserService {
 
         //MASTER 권한도 아니고, 본인이 아닌 경우 에러 발생
         if(!authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_MASTER"))){
-            if(!authentication.getName().equals(user.getUsername())){
+            if(!currentUserName.equals(user.getUsername())){
                 throw new TmsCustomException(ErrorCode.NOT_PERMITTED);
             }
         }
