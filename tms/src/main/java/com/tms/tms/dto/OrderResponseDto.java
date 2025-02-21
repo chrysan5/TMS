@@ -18,9 +18,9 @@ public class OrderResponseDto {
     private Long endHubId;
     private StoreResponseDto storeResponseDto;
     private ProductResponseDto productResponseDto;
-    private Integer productQuantity;
+    private Integer quantity;
 
-    public OrderResponseDto(Order order){
+    /*public OrderResponseDto(Order order){
         this.orderId = order.getOrderId();
         this.state = String.valueOf(order.getState());
         this.receiveStoreId = order.getReceiveStoreId();
@@ -30,5 +30,5 @@ public class OrderResponseDto {
         this.storeResponseDto = new StoreResponseDto(order.getStore());
         this.productResponseDto = new ProductResponseDto(order.getProduct());
         this.productQuantity = order.getProductQuantity();
-    }
+    }*/
 }

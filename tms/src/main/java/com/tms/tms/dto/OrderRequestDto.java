@@ -11,9 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OrderRequestDto {
     @NotNull
-    private Long receiveStoreId;
+    private Long sellerStoreId;
     @NotNull
     private Long productId;
     @NotNull
-    private Integer productQuantity;
+    private Integer quantity;
 }
