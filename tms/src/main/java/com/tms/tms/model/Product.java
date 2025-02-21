@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.math.BigDecimal;
+
 @SQLRestriction("is_delete = false")
 @Setter
 @Getter
@@ -25,7 +27,7 @@ public class Product extends Timestamped {
     private String productName;
 
     @Column(nullable = false)
-    private Integer productPrice;
+    private BigDecimal price; //Integer -> bigDecimal로 수정함
 
     private boolean isDelete = false;
 
@@ -37,14 +39,14 @@ public class Product extends Timestamped {
 
     public Product(ProductRequestDto productRequestDto, Store store, Long hubId){
         this.productName = productRequestDto.getProductName();
-        this.productPrice = productRequestDto.getProductPrice();
+        this.price = productRequestDto.getPrice();
         this.store = store;
         this.hubId = hubId;
     }
 
     public void updateProduct(ProductRequestDto productRequestDto, Store store, Long hubId){
         this.productName = productRequestDto.getProductName();
-        this.productPrice = productRequestDto.getProductPrice();
+        this.price = productRequestDto.getPrice();
         this.store = store;
         this.hubId = hubId;
     }
