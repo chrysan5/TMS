@@ -1,0 +1,25 @@
+package com.tms.tms.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import java.util.ArrayList;
+import java.util.List;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@Entity
+@Table(name = "p_carts")
+public class Cart {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_id")
+    private Long cartId;
+
+    private Long userId;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartProduct> cartProducts = new ArrayList<>();
+}
