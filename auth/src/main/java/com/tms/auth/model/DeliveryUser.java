@@ -33,8 +33,7 @@ public class DeliveryUser extends Timestamped {
 
     private Boolean isDelete = false;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @OneToOne(mappedBy = "deliveryUser")
     private User user;
 
     public DeliveryUser(User user, Long hubId) {

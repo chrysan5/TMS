@@ -31,7 +31,8 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role = UserRoleEnum.USER;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "delivery_user_id", nullable = false)
     private DeliveryUser deliveryUser;
 
     private Boolean isDelete = false;
