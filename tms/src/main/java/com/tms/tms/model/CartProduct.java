@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -24,9 +26,9 @@ public class CartProduct {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    private Long quantity;
+    private int quantity;
 
-    private Long price;
+    private BigDecimal price;
 
     private Long isSelected;
 }
