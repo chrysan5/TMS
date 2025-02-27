@@ -12,11 +12,11 @@ spring:
         - id: auth-service
           uri: lb://auth-service
           predicates:
-            - Path=/auth/**,/users/**,/delivery-users/**
+            - Path=/auth/**,/users/**
         - id: tms-service
           uri: lb://tms-service
           predicates:
-            - Path=/hubs/**,/stores/**,/products/**,/orders/**,/openApi/**
+            - Path=/hubs/**,/stores/**,/products/**,/carts/**,/orders/**,/delivery/**,/openApi/**
 
       discovery:
         locator:

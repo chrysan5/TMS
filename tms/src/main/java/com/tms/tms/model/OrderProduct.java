@@ -11,13 +11,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Entity
 @Table(name = "p_order_products")
-public class OrderProduct {
+public class OrderProduct  extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_product_id")
     private Long orderProductId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
