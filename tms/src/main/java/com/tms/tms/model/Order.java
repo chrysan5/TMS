@@ -47,7 +47,7 @@ public class Order extends Timestamped {
     private boolean isDelete = false;
 
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 

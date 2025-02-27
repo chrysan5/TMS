@@ -12,14 +12,19 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "p_carts")
-public class Cart {
+public class Cart extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
     private Long cartId;
 
-    private Long userId;
+    @Column(nullable = false)
+    private String username;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartProduct> cartProducts = new ArrayList<>();
+
+    public Cart (String username){
+        this.username = username;
+    }
 }

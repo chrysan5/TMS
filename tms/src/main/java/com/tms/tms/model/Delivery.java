@@ -12,7 +12,7 @@ import org.hibernate.annotations.SQLRestriction;
 @NoArgsConstructor
 @Entity
 @Table(name = "p_deliveries")
-public class Delivery {
+public class Delivery  extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "delivery_id")

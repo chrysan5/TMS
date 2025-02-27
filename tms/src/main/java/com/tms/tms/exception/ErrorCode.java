@@ -19,7 +19,9 @@ public enum ErrorCode {
     NOT_FOUND_STORE(HttpStatus.NOT_FOUND, "업체가 존재하지 않습니다."),
     NOT_FOUND_PRODUCT(HttpStatus.NOT_FOUND, "상품이 존재하지 않습니다."),
     NOT_FOUND_ORDER(HttpStatus.NOT_FOUND, "주문이 존재하지 않습니다."),
-    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다.")
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
+    NOT_FOUND_CART(HttpStatus.NOT_FOUND, "장바구니가 존재하지 않습니다."),
+    NOT_FOUND_CART_PRODUCT(HttpStatus.NOT_FOUND, "장바구니_상품이 존재하지 않습니다.")
 
     ;
 

@@ -32,7 +32,7 @@ public class User extends Timestamped {
     private UserRoleEnum role = UserRoleEnum.USER;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "delivery_user_id", nullable = false)
+    @JoinColumn(name = "delivery_user_id")
     private DeliveryUser deliveryUser;
 
     private Boolean isDelete = false;
