@@ -79,7 +79,7 @@ public class CartService {
     @Transactional
     public void removeCart(String username) {
         Cart cart = findByUsernameOrElseThrow(username);
-        List<CartProduct> cartProducts = cartProductRepository.findByCart(cart);
+        List<CartProduct> cartProducts = cartProductRepository.findAllByCart(cart);
 
         cartProductRepository.deleteAll(cartProducts);
         cartRepository.delete(cart);

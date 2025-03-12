@@ -18,7 +18,7 @@ public interface CartProductRepository extends JpaRepository<CartProduct, Long> 
 
     boolean existsByCart(Cart cart);
 
-    List<CartProduct> findByCart(Cart cart);
+    List<CartProduct> findAllByCart(Cart cart);
 
     @Query("SELECT cp FROM CartProduct cp JOIN FETCH cp.product WHERE cp.cart = :cart")
     Page<CartProduct> findAllByCart(Cart cart, Pageable pageable);

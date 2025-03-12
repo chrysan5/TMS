@@ -45,6 +45,11 @@ public class StoreService {
             throw new TmsCustomException(ErrorCode.NOT_FOUND_USER);
         }
 
+        //유저당 하나의 업체만 가질 수 있음
+        storeRepository.findByUsername(username).ifPresent(store -> {
+                    throw new TmsCustomException(ErrorCode.ALREADY_EXIST_STORE);
+        });
+
         Hub hub = hubService.findByIdOrElseThrow(storeRequestDto.getHubId());
         Store store =  storeRepository.save(new Store(storeRequestDto, username, hub));
         return new StoreResponseDto(store);
