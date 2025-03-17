@@ -19,7 +19,8 @@
 - 🗂️ **허브 관리**: 허브의 위치정보는 위경도 데이터로 저장되어 있으며, 주문시 배송을 위한 날씨 정보를 가져오는데 사용됩니다.
 - 🏪 **업체 관리**: 업체 주인은 다른 업체의 상품을 주문하거나, 요청받을 수 있으며 상품은 허브를 거쳐 배송됩니다.
 - 📦 **상품 관리**: 가게 주인은 상품을 등록하고, 수정하며, 삭제할 수 있습니다.
-- 🛒 **주문 관리**: 업체 주인은 상품을 주문, 수정, 취소할 수 있습니다.
+- 👜 **장바구니 관리**: 업체에 속한 사용자는 상품을 장바구니에 담아서 주문할 수 있습니다.
+- 🛒 **주문 관리**: 업체 주인은 상품을 주문, 수정, 취소, 조회, 주문 상태 변경을 할 수 있습니다.
 - 🛠️ **슬랙 메시지**: 공공 포털 오픈 날씨 API와 구글 gemini API를 이용한 날씨 정보를 저장하고 slack API를 통해 슬랙 메시지로 전달됩니다.
 - 🔍 **검색 기능**: 사용자는 다양한 검색 조건과 필터를 적용하여 원하는 허브, 업체, 상품을 쉽게 검색할 수 있습니다.
 
@@ -85,17 +86,3 @@ cd tms
 - <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"> : 관계형 데이터베이스로 사용되었습니다.
 - <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"> : MSA 방식의 서비스들을 한번에 띄우기 위한 도커 컴포즈를 사용하였습니다.
 
-## 트러블 슈팅
-
-- JPA 양방향 연관관계에서 순환참조 문제 -> responseDto에서 엔티티가 아닌 dto를 반환하도록 변경하였다.
-  - https://github.com/chrysan5/tmsSystem/commit/664ccde5dadae19a28fd61c826e4079cc62adab7#diff-951fa22d343c74f8435612a30b1df4fa944eacd9bd47dff4ff295cdedbe4b486L16
-
-- auditing 적용시 인증 객체가 있어야 하지만 인증 객체는 Auth 서비스만 가지고 있었다. -> jwt 토큰에 들어있는 정보로 인증객체 만드는 필터를 적용하여 사용하였다
-  - https://github.com/chrysan5/tmsSystem/commit/b696356aa7163dfae28bb37106cd49b08e2091da
-  
-- @SQLRestriction("is_delete = false")로 논리적 삭제를 구현하였으나, is_delete=true까지 모두 조회해야하는 경우 발생 - nativeQuery = true 조건을 사용하여 해결하였다.
-  - https://github.com/chrysan5/tmsSystem/commit/59cf9851dcbdbea528c512366061fa12346a5bdc#diff-46485dc7ed2739c7a2ddd978e96a8a6a32a96ff4e3f5ece63cea394073420b7e
-  
-- 스케줄러를 tms 서비스에서 실행하려 했더니 403 forbidden 에러가 뜨며 권한을 확인하였다(로그인을 해야하는 상황) -> 원인은 slack 메시지를 저장하는 과정에서 auditing시 createBy 값이 인증객체가 없어서 null로 들어갔기 때문이다. 따라서 인증객체가 없을 경우도 insert 가능하도록 로직을 수정하고 스케줄러를 서비스단 로직만 가져오게 하여 해결하였다.
-  - https://github.com/chrysan5/tmsSystem/commit/de6070490c07ef451dc3f2bc7dca08b3b1bd67ba#diff-1c1c1a2466ef5f33a32b5fa5f9ac8e10e72c32b211a1e9b56fe79d9e7c246d62
-  - https://github.com/chrysan5/tmsSystem/commit/c035cd81d664603db5baeaa12a8864fdc7e79362
