@@ -7,10 +7,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RequestMapping("orders")
@@ -20,42 +22,28 @@ public class OrderController {
     private final OrderService orderService;
 
     //모든 권한 가능
-    //주문 생성
-    @PostMapping("/store/{storeId}")
-    public ResponseEntity<OrderResponseDto> createOrder(
-            @Valid @RequestBody OrderRequestDto requestDto,
-            @PathVariable("storeId") Long storeId
+    //주문 생성 - 장바구니 상품 전체 주문
+    //@PostMapping("/store/{storeId}")
+    @PostMapping
+    public ResponseEntity<Void> createOrder(
+        @Valid @RequestBody OrderRequestDto orderRequestDto,
+        Principal principal
     ){
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(orderService.createOrder(requestDto, storeId));
+        orderService.createOrder(orderRequestDto, principal.getName());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     //주문 수정
-    @PreAuthorize("hasAnyAuthority('MASTER', 'HUB', 'STORE')")
     @PutMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> updateOrder(
-            @Valid @RequestBody OrderRequestDto requestDto,
-            @PathVariable("orderId") Long orderId,
-            @RequestHeader(value = "X-username", required = true) String username,
-            @RequestHeader(value = "X-role", required = true) String role
+            @Valid @RequestBody OrderRequestDto orderRequestDto,
+            @PathVariable("orderId") Long orderId
     ){
-        return ResponseEntity.ok(orderService.updateOrder(requestDto, orderId, username, role));
-    }
-
-    //주문 취소
-    @PreAuthorize("hasAnyAuthority('MASTER', 'HUB', 'STORE')")
-    @PutMapping("/cancel/{orderId}")
-    public ResponseEntity<Void> cancelOrder(
-            @PathVariable("orderId") Long orderId,
-            @RequestHeader(value = "X-username", required = true) String username,
-            @RequestHeader(value = "X-role", required = true) String role
-    ){
-        orderService.cancelOrder(orderId, username, role);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(orderService.updateOrder(orderRequestDto, orderId));
     }
 
 
-    //주문 조회 : 본인의 주문만 조회 가능
+    //주문 조회 단일 : 본인의 주문만 조회 가능
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> getOrder(
             @PathVariable("orderId") Long orderId,
@@ -64,29 +52,37 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrder(orderId, username));
     }
     
-    //가게별 주문 조회
-    @GetMapping("/store/{storeId}")
-    public ResponseEntity<List<OrderResponseDto>> getOrdersByStore(@PathVariable("storeId") Long storeId){
-        return ResponseEntity.ok(orderService.getOrdersByStore(storeId));
+    //주문 조회 복수(리스트) : 가게별 주문 조회
+    @GetMapping("/store")
+    public ResponseEntity<List<OrderResponseDto>> getOrdersByStore(Principal principal){
+        return ResponseEntity.ok(orderService.getOrdersByStore(principal.getName()));
     }
 
-    //배송 위치 변경
+    //배송 위치 변경 -> 배송 컨트롤러로 이동시키기
     //@PreAuthorize("hasAnyAuthority('MASTER', 'HUB')")
-    @PutMapping("/{orderId}/location")
+    /*@PutMapping("/{orderId}/location")
     public ResponseEntity<OrderResponseDto> updateOrderLocation(
             @RequestParam("location") String location,
             @PathVariable("orderId") Long orderId
     ){
         return ResponseEntity.ok(orderService.updateOrderLocation(location, orderId));
-    }
+    }*/
 
-    //주문 상태 변경
-    //@PreAuthorize("hasAnyAuthority('MASTER', 'HUB')")
-    @PutMapping("/{orderId}/state")
-    public ResponseEntity<OrderResponseDto> updateOrderState(
-            @RequestParam("state") String state,
-            @PathVariable("orderId") Long orderId
+    
+    //주문 취소는 관리자, 유저가 가능하고 완료는 배송이 완료되면 되도록 설정
+    //주문 취소
+    @PutMapping("/{orderId}/cancel")
+    public ResponseEntity<Map<String, Object>> cancelOrder(
+            @PathVariable("orderId") Long orderId,
+            @RequestHeader(value = "X-role", required = true) String role
     ){
-        return ResponseEntity.ok(orderService.updateOrderState(state, orderId));
+        OrderResponseDto orderResponseDto = orderService.cancelOrder(orderId, role);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Order canceled successfully");
+        response.put("orderId", orderId);
+        response.put("state", orderResponseDto.getState());
+
+        return ResponseEntity.ok(response);
     }
 }

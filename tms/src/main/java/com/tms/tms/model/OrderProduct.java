@@ -10,7 +10,12 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "p_order_products")
+@Table(
+        name = "p_order_products",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_order_product", columnNames = {"order_id", "product_id"})
+        }
+)
 public class OrderProduct  extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +34,10 @@ public class OrderProduct  extends Timestamped {
 
     private BigDecimal price;
 
+    public OrderProduct(Order order, Product product, int quantity, BigDecimal price){
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+    }
 }

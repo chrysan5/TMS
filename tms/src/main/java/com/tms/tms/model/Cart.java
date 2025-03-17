@@ -21,7 +21,7 @@ public class Cart extends Timestamped {
     @Column(nullable = false)
     private String username;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<CartProduct> cartProducts = new ArrayList<>();
 
     public Cart (String username){

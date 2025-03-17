@@ -1,6 +1,5 @@
 package com.tms.tms.model;
 
-import com.tms.tms.dto.OrderRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +27,7 @@ public class Order extends Timestamped {
     private OrderState state = OrderState.ORDERED; //orderd, canceled, completed
 
     @Column(nullable = false)
-    private Long userId; //주문한 업체 유저 아이디
+    private String username; //주문한 업체 유저아이디
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
@@ -37,12 +36,12 @@ public class Order extends Timestamped {
     @Column(nullable = false)
     private Long sellerStoreId; //주문받는 업체
 
-    @Column(nullable = false)
-    private BigDecimal totalQuantity;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
+    private List<OrderProduct> orderProducts = new ArrayList<>();
 
-    @Column(nullable = false)
-    private BigDecimal totalPrice;
+    private int totalQuantity;
 
+    private BigDecimal totalPrice = BigDecimal.ZERO;
 
     private boolean isDelete = false;
 
@@ -51,27 +50,18 @@ public class Order extends Timestamped {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderProduct> orderProducts = new ArrayList<>();
 
-    /*public Order(OrderRequestDto requestDto, Long endHubId, Store store, Product product){
-        this.state = OrderState.ORDERED;
-        this.receiveStoreId = requestDto.getReceiveStoreId();
-        this.location = OrderLocation.PENDING;
-        this.startHubId = store.getHub().getHubId();
-        this.endHubId = endHubId;
-        this.store = store;
-        this.product = product;
-        this.productQuantity = requestDto.getProductQuantity();
+    public Order(String username, Store requestStore, Long sellerStoreId){
+        this.username = username;
+        this.store = requestStore;
+        this.sellerStoreId = sellerStoreId;
     }
 
-    public void updateOrder(OrderRequestDto requestDto, Long endHubId, Product product){
+    public void updateOrder(List<OrderProduct> orderProducts, int totalQuantity, BigDecimal totalPrice){
         this.state = OrderState.ORDERED;
-        this.receiveStoreId = requestDto.getReceiveStoreId();
-        this.location = OrderLocation.PENDING;
-        this.startHubId = store.getHub().getHubId();
-        this.endHubId = endHubId;
-        this.product = product;
-        this.productQuantity = requestDto.getProductQuantity();
-    }*/
+        this.orderProducts = orderProducts;
+        this.totalQuantity = totalQuantity;
+        this.totalPrice = totalPrice;
+    }
+
 }

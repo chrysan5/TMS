@@ -2,33 +2,35 @@ package com.tms.tms.dto;
 
 
 import com.tms.tms.model.Order;
-import com.tms.tms.model.Product;
-import com.tms.tms.model.Store;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
 public class OrderResponseDto {
     private Long orderId;
     private String state;
-    private Long receiveStoreId;
-    private String location;
-    private Long startHubId;
-    private Long endHubId;
-    private StoreResponseDto storeResponseDto;
-    private ProductResponseDto productResponseDto;
-    private Integer quantity;
+    private String username;
+    private Long requestStoreId; //주문하는 업체
+    private Long sellerStoreId; //주문받는 업체
+    private int totalQuantity;
+    private String totalPrice;
+    private Long deliveryId;
+    private List<OrderProductResponseDto> orderProductResponseDtoList;
 
-    /*public OrderResponseDto(Order order){
+
+    public OrderResponseDto(Order order){
         this.orderId = order.getOrderId();
         this.state = String.valueOf(order.getState());
-        this.receiveStoreId = order.getReceiveStoreId();
-        this.location = String.valueOf(order.getLocation());
-        this.startHubId = order.getStartHubId();
-        this.endHubId = order.getEndHubId();
-        this.storeResponseDto = new StoreResponseDto(order.getStore());
-        this.productResponseDto = new ProductResponseDto(order.getProduct());
-        this.productQuantity = order.getProductQuantity();
-    }*/
+        this.username = order.getUsername();
+        this.requestStoreId = order.getStore().getStoreId();
+        this.sellerStoreId = order.getSellerStoreId();
+        this.totalQuantity = order.getTotalQuantity();
+        this.totalPrice = String.valueOf(order.getTotalPrice());
+        //this.deliveryId = order.getProductQuantity();
+        this.orderProductResponseDtoList = order.getOrderProducts().stream().map(OrderProductResponseDto::new).collect(Collectors.toList());
+    }
 }
