@@ -12,8 +12,8 @@ import lombok.Setter;
 public class HubRequestDto {
     @NotBlank(message = "허브 지역을 입력해주세요.")
     private String hubRegion;
-    @NotNull
+    @NotBlank(message = "위도를 입력해주세요.")
     private String hubAddressX;
-    @NotNull
+    @NotBlank(message = "경도를 입력해주세요.")
     private String hubAddressY;
 }
