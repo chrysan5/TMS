@@ -22,7 +22,7 @@ public class Delivery  extends Timestamped {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderLocation location; //pending, intra, inter
+    private OrderLocation location = OrderLocation.PENDING; //pending, intra, inter
 
     @Column(nullable = false)
     private Long startHubId;
@@ -34,4 +34,11 @@ public class Delivery  extends Timestamped {
 
     @OneToOne(mappedBy = "delivery")
     private Order order;
+
+    public Delivery(String address, Long startHubId, Long endHubId, Order order){
+        this.address = address;
+        this.startHubId = startHubId;
+        this.endHubId = endHubId;
+        this.order = order;
+    }
 }

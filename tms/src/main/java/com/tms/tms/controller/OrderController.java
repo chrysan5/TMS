@@ -22,7 +22,7 @@ public class OrderController {
     private final OrderService orderService;
 
     //모든 권한 가능
-    //주문 생성 - 장바구니 상품 전체 주문
+    //주문 생성 - 장바구니 상품 전체 주문, 배송 생성 동시에
     //@PostMapping("/store/{storeId}")
     @PostMapping
     public ResponseEntity<Void> createOrder(
@@ -57,16 +57,6 @@ public class OrderController {
     public ResponseEntity<List<OrderResponseDto>> getOrdersByStore(Principal principal){
         return ResponseEntity.ok(orderService.getOrdersByStore(principal.getName()));
     }
-
-    //배송 위치 변경 -> 배송 컨트롤러로 이동시키기
-    //@PreAuthorize("hasAnyAuthority('MASTER', 'HUB')")
-    /*@PutMapping("/{orderId}/location")
-    public ResponseEntity<OrderResponseDto> updateOrderLocation(
-            @RequestParam("location") String location,
-            @PathVariable("orderId") Long orderId
-    ){
-        return ResponseEntity.ok(orderService.updateOrderLocation(location, orderId));
-    }*/
 
     
     //주문 취소는 관리자, 유저가 가능하고 완료는 배송이 완료되면 되도록 설정

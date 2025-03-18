@@ -26,6 +26,7 @@ public class OrderService {
     private final CartRepository cartRepository;
     private final CartProductRepository cartProductRepository;
     private final OrderProductRepository orderProductRepository;
+    private final DeliveryRepository deliveryRepository;
 
 
     @Transactional
@@ -62,8 +63,19 @@ public class OrderService {
 
         //order에 세부 값 추가
         order.updateOrder(orderProducts, totalQuantity, totalPrice);
-
         orderRepository.save(order);
+
+        //배송 관련 로직
+        Long startHubId = requestStore.getHub().getHubId();
+
+        Store sellerStore = storeRepository.findById(orderRequestDto.getSellerStoreId()).orElseThrow(
+                () -> new TmsCustomException(ErrorCode.NOT_FOUND_STORE));
+        Long endHubId = sellerStore.getHub().getHubId();
+
+        Delivery delivery = new Delivery(orderRequestDto.getAddress(), startHubId, endHubId, order);
+        deliveryRepository.save(delivery);
+
+        order.setDelivery(delivery);
     }
 
     //배송 상태가 pending인 경우만, 주문 후 12시간 이내만 수정 가능, 주문 업체만 변경 가능
@@ -71,9 +83,11 @@ public class OrderService {
     public OrderResponseDto updateOrder(@Valid OrderRequestDto orderRequestDto, Long orderId) {
         Order order = findByIdOrElseThrow(orderId);
 
-        /*if(!order.getState().equals("PENDING")){
-            throw new TmsCustomException(ErrorCode.CANT_MODIFY_ORDER);
-        }*/
+        if(order.getState().equals("CANCELED")){
+            throw new TmsCustomException(ErrorCode.ALREADY_CANCELED_ORDER);
+        }else if(order.getState().equals("COMPLETED)")) {
+            throw new TmsCustomException(ErrorCode.ALREADY_COMPLETED_ORDER);
+        }
 
         LocalDateTime createdTime = order.getCreatedAt();
         if(createdTime.isBefore(LocalDateTime.now().minus(12, ChronoUnit.HOURS))){
@@ -81,6 +95,19 @@ public class OrderService {
         }
 
         order.setSellerStoreId(orderRequestDto.getSellerStoreId());
+
+
+        //배송 관련 로직
+        if(!OrderLocation.PENDING.equals(order.getDelivery().getLocation())){
+            throw new TmsCustomException(ErrorCode.ALREADY_IN_DELIVERY);
+        }
+
+        Store sellerStore = storeRepository.findById(orderRequestDto.getSellerStoreId()).orElseThrow(
+                () -> new TmsCustomException(ErrorCode.NOT_FOUND_STORE));
+
+        order.getDelivery().setEndHubId(sellerStore.getHub().getHubId());
+        order.getDelivery().setAddress(orderRequestDto.getAddress());
+
         return new OrderResponseDto(order);
     }
 
@@ -107,21 +134,17 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    /*@Transactional
-    public OrderResponseDto updateOrderLocation(String location, Long orderId) {
-        Order order = findByIdOrElseThrow(orderId);
-        order.setLocation(OrderLocation.valueOf(location));
-        return new OrderResponseDto(order);
-    }*/
 
     //배송 상태가 pending인 경우만, 주문 후 3시간 이내만 취소 가능, 관리자의 경우 취소 가능
     @Transactional
     public OrderResponseDto cancelOrder(Long orderId, String role) {
-        /*if(!order.getState().equals("PENDING")){
-            throw new TmsCustomException(ErrorCode.CANT_MODIFY_ORDER);
-        }*/
-
         Order order = findByIdOrElseThrow(orderId);
+
+        if(OrderState.CANCELED.equals(order.getState())){
+            throw new TmsCustomException(ErrorCode.ALREADY_CANCELED_ORDER);
+        }else if(OrderState.COMPLETED.equals(order.getState())) {
+            throw new TmsCustomException(ErrorCode.ALREADY_COMPLETED_ORDER);
+        }
 
         if(!role.equals("MASTER")) {
             LocalDateTime createdTime = order.getCreatedAt();
@@ -147,6 +170,16 @@ public class OrderService {
         cartProductRepository.saveAll(cartProducts);
         orderProductRepository.deleteAll(orderProducts);
         orderProductRepository.flush(); //윗줄 위해 추가
+
+        //배송 관련 로직
+        Delivery delivery = deliveryRepository.findByOrder(order).orElseThrow(
+                () -> new TmsCustomException(ErrorCode.NOT_FOUND_DELIVERY));
+
+        if(!OrderLocation.PENDING.equals(order.getDelivery().getLocation())){
+            throw new TmsCustomException(ErrorCode.ALREADY_IN_DELIVERY);
+        }
+
+        delivery.setDelete(true);
 
         return new OrderResponseDto(order);
     }
