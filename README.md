@@ -74,7 +74,8 @@ cd tms
 
 
 ## ERD 다이어그램
-![image](https://github.com/user-attachments/assets/e1caf88b-2f79-4871-8735-19706bbe51ac)
+![image](https://github.com/user-attachments/assets/ef730818-1e28-4978-b54b-80f9af197c9e)
+
 
 
 ## ⚙ 기술 스택
